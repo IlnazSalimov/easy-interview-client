@@ -1,0 +1,40 @@
+<div class="login-register" style="background-image: url(assets/images/background/login-register.jpg);">
+    <div class="login-register-box">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Sign In</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div fxLayout="row wrap">
+                    <!--                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" v="100">-->
+                    <!--                            <mat-form-field>-->
+                    <!--                                <input matInput placeholder="Username">-->
+                    <!--                            </mat-form-field>-->
+                    <!--                        </div>-->
+                    <!--                        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">-->
+                    <!--                            <mat-form-field>-->
+                    <!--                                <input matInput placeholder="Password">-->
+                    <!--                            </mat-form-field>-->
+                    <!--                        </div>-->
+
+
+                    <!--                        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">-->
+                    <!--                            <mat-checkbox>Remember me</mat-checkbox>-->
+                    <!--                        </div>-->
+
+                    <!--                        <div class="link text-right" fxFlex.gt-sm="50" fxFlex.gt-xs="50">-->
+                    <!--                            <a>Forgot pwd?</a>-->
+                    <!--                        </div>-->
+
+                    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                        <button class="btn-block" mat-stroked-button color="primary" (click)="login($event)">
+                            <fa-icon [icon]="faGoogle"></fa-icon>
+                            Login
+                        </button>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

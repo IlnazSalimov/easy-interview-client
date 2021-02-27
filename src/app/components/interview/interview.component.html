@@ -1,0 +1,13 @@
+<div fxLayout="row">
+    <mat-card fxFlex="100">
+        <mat-card-content fxLayout="row wrap">
+            <div fxFlex.gt-sm="50%" fxFlex="100">
+                <mat-card-title>Code editor</mat-card-title>
+                <app-code-editor></app-code-editor>
+            </div>
+            <div fxFlex.gt-sm="50%" fxFlex="100">
+                <video *ngFor="let video of videosSources" [srcObject]="video.src" autoplay></video>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
