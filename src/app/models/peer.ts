@@ -1,27 +1,29 @@
 import { Instance } from 'simple-peer';
 
 export interface PeerData {
-    id: string;
+    connectionId: string;
     data: any;
 }
 
-export interface UserInfo {
-    userName: string;
-    connectionId: string;
-}
-
 export interface SignalInfo {
-    user: string;
+    connectionId: string;
     signal: any;
 }
 
-export interface UserPeer {
-    user: UserInfo;
-    peer: Instance;
+export interface User {
+    name: string;
+    picture: string;
+}
+
+export interface UserInfo {
+    name: string;
+    picture: string;
+    connectionId: string;
+    peerInstance: Instance;
 }
 
 export interface Video {
-    connectionId: string;
+    user: UserInfo;
     src: any;
 }
 

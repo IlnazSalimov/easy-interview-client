@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { Subject } from 'rxjs';
-import { SignalInfo, UserInfo } from '../../models/peer';
+import { User, SignalInfo, UserInfo } from '../../models/peer';
+import * as config from '../../../environments/environment';
+import { UserToken } from '../api/oidc-user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -25,10 +27,10 @@ export class SignalrService {
     constructor() {
     }
 
-    public async startConnection(currentUser: string): Promise<void> {
+    public async startConnection(newUser: User): Promise<void> {
 
         this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl('https://192.168.0.14:5001/signalrtc')
+            .withUrl(`${ config.environment.apiEndpoint }/signalrtc`)
             .build();
 
         await this.hubConnection.start();
@@ -49,12 +51,12 @@ export class SignalrService {
             this.disconnectedPeer.next(data);
         });
 
-        this.hubConnection.on('SendSignal', (user, signal) => {
+        this.hubConnection.on('SendSignal', (connectionId, signal) => {
             console.log('-> [SOCKET] on SendSignal <-');
-            this.signal.next({user, signal});
+            this.signal.next({ connectionId, signal });
         });
 
-        await this.hubConnection.invoke('NewUser', currentUser);
+        await this.hubConnection.invoke('NewUser', newUser);
         console.log('<- [SOCKET] NewUser ->');
     }
 
@@ -63,8 +65,8 @@ export class SignalrService {
         this.hubConnection.invoke('SendSignal', signal, user);
     }
 
-    public sayHello(userName: string, user: string): void {
+    public sayHello(user: User, recipientConnectionId: string): void {
         console.log('<- [SOCKET] HelloUser');
-        this.hubConnection.invoke('HelloUser', userName, user);
+        this.hubConnection.invoke('HelloUser', user, recipientConnectionId);
     }
 }

@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { Router } from '@angular/router';
+import { OidcUserService } from '../../../services/api/oidc-user.service';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: [ './header.component.scss' ]
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
 
-    public identityClaim: any;
-
-    constructor(private oauthService: OAuthService) {
+    constructor(public oidcUserService: OidcUserService) {
     }
 
     ngOnInit(): void {
-        this.identityClaim = this.oauthService.getIdentityClaims();
+        this.oidcUserService.socialIdentityClaim$.subscribe(c=>{
+            console.log(c);
+        })
     }
 
 }

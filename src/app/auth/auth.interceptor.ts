@@ -6,32 +6,23 @@ import {
     HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { JwtService } from '../services/jwt.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor() {
+    constructor(private jwtService: JwtService) {
     }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        // return this.oidcSecurityService.isAuthenticated$.pipe(
-        //     switchMap(isAuthorized => {
-        //         console.log('intercept isAuthorized', isAuthorized);
-        //         if (isAuthorized) {
-        //             const token = this.oidcSecurityService.getToken();
-        //             console.log('token', token);
-        //             const cloneRequest = request.clone({
-        //                 setHeaders: {
-        //                     Authorization: 'Bearer ' + token
-        //                 }
-        //             });
-        //
-        //             return next.handle(cloneRequest);
-        //         }
-        //         return next.handle(request);
-        //     })
-        // );
+        const token = this.jwtService.getToken();
+        if (token && request.url !== "https://accounts.google.com/.well-known/openid-configuration") {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
         return next.handle(request);
     }
 }

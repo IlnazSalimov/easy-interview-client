@@ -6,7 +6,15 @@
                 <app-code-editor></app-code-editor>
             </div>
             <div fxFlex.gt-sm="50%" fxFlex="100">
-                <video *ngFor="let video of videosSources" [srcObject]="video.src" autoplay></video>
+                <div *ngFor="let video of videosSources">
+                    <div>
+                        {{video.user.name}}
+                        {{video.user.picture}}
+                        {{video.user.connectionId}}
+                    </div>
+
+                    <video [srcObject]="video.src" autoplay></video>
+                </div>
             </div>
         </mat-card-content>
     </mat-card>

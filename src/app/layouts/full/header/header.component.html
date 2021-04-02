@@ -2,9 +2,9 @@
 <!-- Profile - style you can find in header.scss -->
 <!-- ============================================================== -->
 
-<button [matMenuTriggerFor]="profile" *ngIf="identityClaim else signIn" mat-icon-button
+<button [matMenuTriggerFor]="profile" *ngIf="(oidcUserService.socialIdentityClaim$ | async) else signIn" mat-icon-button
         class="m-r-5">
-    <img [src]="identityClaim.picture" alt="user" class="profile-pic">
+    <img [src]="(oidcUserService.socialIdentityClaim$ | async).picture" alt="user" class="profile-pic">
 </button>
 <mat-menu #profile="matMenu" class="mymegamenu">
     <button mat-menu-item>

@@ -3,8 +3,10 @@
         <mat-card-title>Create interview</mat-card-title>
         <mat-form-field appearance="fill">
             <mat-label>Date</mat-label>
-            <input matInput>
+            <input matInput [matDatepicker]="picker" [formControl]="bookedDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <button mat-flat-button color="primary">Create</button>
+        <button mat-flat-button (click)="create()" color="primary">Create</button>
     </mat-card-content>
 </mat-card>

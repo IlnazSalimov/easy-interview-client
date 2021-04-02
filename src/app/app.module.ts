@@ -26,7 +26,9 @@ import { CreateInterviewComponent } from './components/create-interview/create-i
 import { LoginCallbackComponent } from './components/login-callback/login-callback.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { OidcUserService } from './services/api/oidc-user.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 
 @NgModule({
@@ -62,10 +64,19 @@ import { HttpClientModule } from '@angular/common/http';
                 allowedUrls: ['http://localhost:60726/api'],
                 sendAccessToken: true
             }
-        })
+        }),
+        ReactiveFormsModule
     ],
-    providers: [ MenuItems, OidcUserService ],
-    bootstrap: [ AppComponent ]
+    providers: [
+        MenuItems,
+        OidcUserService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

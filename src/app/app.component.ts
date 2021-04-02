@@ -4,11 +4,13 @@ import { OidcUserService } from './services/api/oidc-user.service';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { filter } from 'rxjs/operators';
 import { googleAuthConfig } from './auth/auth-google.config';
+import { JwtService } from './services/jwt.service';
+import { OidcUserModel } from './models/oidc-user/oidc-user.model';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: [ './app.component.scss' ]
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
     title = 'easy-interview';
@@ -16,6 +18,7 @@ export class AppComponent implements OnInit {
     username;
 
     constructor(private oauthService: OAuthService, private router: Router, private oidcUserService: OidcUserService) {
+        console.log('googleAuthConfig', googleAuthConfig);
         this.oauthService.configure(googleAuthConfig);
         this.oauthService.setStorage(sessionStorage);
         this.oauthService.loadDiscoveryDocumentAndTryLogin()
@@ -26,14 +29,12 @@ export class AppComponent implements OnInit {
             // })
             .then(() => {
                 if (this.oauthService.getIdentityClaims()) {
+                    console.log('getIdentityClaims', this.oauthService.getIdentityClaims());
+                    this.oidcUserService.setSocialIdentityClaim(this.oauthService.getIdentityClaims() as OidcUserModel)
                     this.username = this.oauthService.getIdentityClaims()['name'];
                 }
             });
         this.oauthService.setupAutomaticSilentRefresh();
-    }
-
-    async login(event) {
-        this.oauthService.initLoginFlow();
     }
 
     ngOnInit(): void {
@@ -54,14 +55,13 @@ export class AppComponent implements OnInit {
         this.oauthService.events
             .pipe(filter(e => e.type === 'token_received'))
             .subscribe(_ => {
-                console.log('state', this.oauthService.state);
                 this.oauthService.loadUserProfile().then(profile => {
-                    this.oidcUserService.create({
-                        name: profile.name,
-                        email: profile.name,
-                        picture: profile.picture
-                    });
+                    console.log('profile', profile);
                 });
+                console.log('state', this.oauthService.state);
+                this.oidcUserService.auth({
+                    idToken: this.oauthService.getIdToken()
+                }).subscribe();
             });
     }
 }
